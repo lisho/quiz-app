@@ -1,0 +1,42 @@
+/* Reset and basic styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: var(--font-family-sans-serif);
+    font-size: var(--base-font-size);
+    line-height: 1.5;
+    color: var(--dark-color);
+    background-color: var(--background-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column; /* For sticky footer if needed, or just ensure body fills height */
+  }
+  
+  #root {
+    flex-grow: 1; /* Allow React app to fill available space */
+    display: flex;
+    flex-direction: column;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    margin-bottom: var(--spacing-md);
+    font-weight: var(--heading-font-weight);
+    color: var(--dark-color);
+  }
+  
+  p {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  a {
+    color: var(--primary-color);
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }

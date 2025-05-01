@@ -1,0 +1,37 @@
+:root {
+    /* Colors */
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --white-color: #ffffff;
+    --gray-color: #6c757d;
+    --border-color: #dee2e6;
+    --background-color: #f0f2f5; /* Light gray background */
+  
+    /* Typography */
+    --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --base-font-size: 1rem; /* 16px */
+    --heading-font-weight: 600;
+  
+    /* Spacing */
+    --spacing-xs: 0.25rem; /* 4px */
+    --spacing-sm: 0.5rem;  /* 8px */
+    --spacing-md: 1rem;   /* 16px */
+    --spacing-lg: 1.5rem; /* 24px */
+    --spacing-xl: 2rem;   /* 32px */
+  
+    /* Borders & Shadows */
+    --border-radius: 0.3rem;
+    --box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  
+    /* Mobile first breakpoints (example) */
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+  }
