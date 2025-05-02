@@ -1,0 +1,54 @@
+/* Failed Question Review Styles */
+.failed-question-review {
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-color);
+    background-color: #f8f9fa; /* Fondo ligeramente distinto */
+}
+
+.failed-question-review h4 {
+    margin-bottom: var(--spacing-md);
+    font-size: 1.1rem;
+}
+
+.answer-options-review {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--spacing-md) 0;
+}
+
+.answer-review-item {
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+    border-radius: var(--border-radius);
+    border: 1px solid transparent; /* Base border */
+}
+
+.answer-review-item.correct {
+    background-color: #d4edda; /* Verde claro */
+    border-color: var(--success-color);
+    color: #155724; /* Verde oscuro */
+    font-weight: bold;
+}
+
+.answer-review-item.user-incorrect {
+    background-color: #f8d7da; /* Rojo claro */
+    border-color: var(--danger-color);
+    color: #721c24; /* Rojo oscuro */
+    /* text-decoration: line-through; */ /* Opcional: tachar */
+}
+
+/* Estilo específico si la respuesta incorrecta del usuario es diferente de la correcta */
+.answer-review-item.user-incorrect:not(.correct) {
+     /* Puedes añadir estilos específicos aquí si es necesario */
+}
+
+
+.explanation-review {
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-sm);
+    background-color: var(--info-color);
+    color: var(--white-color);
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+}

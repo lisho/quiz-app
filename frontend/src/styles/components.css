@@ -47,7 +47,7 @@
   }
   
   .button:hover {
-    background-color: darken(var(--primary-color), 10%); /* Need a CSS preprocessor for darken or use specific color */
+    background-color: var(--select-color-button);
     border-color: darken(var(--primary-color), 12%);
   }
   

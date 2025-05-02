@@ -1,98 +1,118 @@
 import React, { createContext, useState, useContext, useCallback } from 'react';
-import { shuffleArray } from '../utils/quizUtils';
+// No necesitamos shuffleArray aquí si la DB ya devuelve aleatorio y limitado
+// import { shuffleArray } from '../utils/quizUtils';
 
 const QuizContext = createContext();
 
 export const QuizProvider = ({ children }) => {
-  const [questions, setQuestions] = useState([]);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [userAnswers, setUserAnswers] = useState([]); // Array of selected answer indices
-  const [score, setScore] = useState(0);
-  const [quizCompleted, setQuizCompleted] = useState(false);
-  const [showExplanation, setShowExplanation] = useState(false);
-  const [selectedAnswer, setSelectedAnswer] = useState(null); // Currently selected answer index for the active question
+    const [questions, setQuestions] = useState([]);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [userAnswers, setUserAnswers] = useState([]);
+    const [score, setScore] = useState(0);
+    const [quizCompleted, setQuizCompleted] = useState(false);
+    const [showExplanation, setShowExplanation] = useState(false);
+    const [selectedAnswer, setSelectedAnswer] = useState(null);
 
-  const startQuiz = useCallback((allQuestions) => {
-    const shuffledQuestions = shuffleArray(allQuestions); // Shuffle questions on start
-    setQuestions(shuffledQuestions);
-    setCurrentQuestionIndex(0);
-    setUserAnswers(new Array(shuffledQuestions.length).fill(null)); // Initialize with nulls
-    setScore(0);
-    setQuizCompleted(false);
-    setShowExplanation(false);
-    setSelectedAnswer(null);
-  }, []);
+    // --- MODIFICAR ESTA FUNCIÓN ---
+    // Ahora simplemente recibe las preguntas ya preparadas
+    const startQuiz = useCallback((quizQuestions) => {
+        if (!quizQuestions || quizQuestions.length === 0) {
+            console.error("Attempted to start quiz with no questions.");
+            // Podríamos manejar un error aquí o dejar que HomePage lo haga
+            setQuestions([]); // Asegurar que esté vacío si no hay preguntas
+            return;
+        }
+        // No necesita barajar aquí si la API ya lo hizo (ORDER BY RANDOM)
+        setQuestions(quizQuestions);
+        setCurrentQuestionIndex(0);
+        setUserAnswers(new Array(quizQuestions.length).fill(null));
+        setScore(0);
+        setQuizCompleted(false);
+        setShowExplanation(false);
+        setSelectedAnswer(null);
+    }, []);
 
-  const selectAnswer = useCallback((answerIndex) => {
-    if (!showExplanation) { // Only allow selection before submitting
+     // Se llama directamente al hacer clic en una respuesta
+     const processAnswerSelection = useCallback((answerIndex) => {
+        // No hacer nada si la explicación ya se muestra (previene doble procesamiento)
+        if (showExplanation) return;
+
+        const currentQuestion = questions[currentQuestionIndex];
+        if (!currentQuestion) return; // Safety check
+
+        // 1. Marcar la respuesta seleccionada por el usuario
         setSelectedAnswer(answerIndex);
-    }
-  }, [showExplanation]);
 
-  const submitAnswer = useCallback(() => {
-    if (selectedAnswer === null) return; // Don't submit if no answer is selected
+        // 2. Evaluar si es correcta
+        const isCorrect = answerIndex === currentQuestion.correcta;
+
+        // 3. Actualizar puntuación si es correcta
+        if (isCorrect) {
+            setScore(prevScore => prevScore + 1);
+        }
+
+        // 4. Registrar la respuesta del usuario (para posible revisión futura)
+        const newUserAnswers = [...userAnswers];
+        newUserAnswers[currentQuestionIndex] = answerIndex;
+        setUserAnswers(newUserAnswers);
+
+        // 5. Mostrar inmediatamente la explicación y el feedback visual
+        setShowExplanation(true);
+
+    }, [questions, currentQuestionIndex, userAnswers, showExplanation]); // Añadir showExplanation a las dependencias
+   
+   
+  
+
+     const goToNextQuestion = useCallback(() => {
+        setShowExplanation(false);
+        setSelectedAnswer(null);
+        if (currentQuestionIndex < questions.length - 1) {
+            setCurrentQuestionIndex(prevIndex => prevIndex + 1);
+        } else {
+            setQuizCompleted(true);
+        }
+     }, [currentQuestionIndex, questions.length]);
+
+    // --- resetQuiz ---
+    const resetQuiz = useCallback(() => {
+        // Limpiamos el estado del quiz
+        setQuestions([]);
+        setCurrentQuestionIndex(0);
+        setUserAnswers([]);
+        setScore(0);
+        setQuizCompleted(false);
+        setShowExplanation(false);
+        setSelectedAnswer(null);
+        // La configuración (filtros, etc.) se maneja en HomePage
+    }, []);
 
     const currentQuestion = questions[currentQuestionIndex];
-    const isCorrect = selectedAnswer === currentQuestion.correcta;
 
-    const newUserAnswers = [...userAnswers];
-    newUserAnswers[currentQuestionIndex] = selectedAnswer; // Store the selected answer
-    setUserAnswers(newUserAnswers);
+    const value = {
+        questions,
+        currentQuestionIndex,
+        currentQuestion,
+        userAnswers,
+        score,
+        quizCompleted,
+        showExplanation,
+        selectedAnswer,
+        startQuiz, // Modificada
+        processAnswerSelection,
+        goToNextQuestion,
+        resetQuiz,
+    };
 
-    if (isCorrect) {
-      setScore(prevScore => prevScore + 1);
-    }
-
-    setShowExplanation(true); // Show explanation after submission
-  }, [questions, currentQuestionIndex, userAnswers, selectedAnswer]);
-
-
-  const goToNextQuestion = useCallback(() => {
-    setShowExplanation(false);
-    setSelectedAnswer(null); // Reset selected answer for the next question
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(prevIndex => prevIndex + 1);
-    } else {
-      setQuizCompleted(true);
-    }
-  }, [currentQuestionIndex, questions.length]);
-
-  const resetQuiz = useCallback(() => {
-    // We'll re-fetch/re-shuffle on startQuiz from HomePage
-    setQuestions([]);
-    setCurrentQuestionIndex(0);
-    setUserAnswers([]);
-    setScore(0);
-    setQuizCompleted(false);
-    setShowExplanation(false);
-    setSelectedAnswer(null);
-  }, []);
-
-  const currentQuestion = questions[currentQuestionIndex];
-
-  const value = {
-    questions,
-    currentQuestionIndex,
-    currentQuestion,
-    userAnswers,
-    score,
-    quizCompleted,
-    showExplanation,
-    selectedAnswer,
-    startQuiz,
-    selectAnswer,
-    submitAnswer,
-    goToNextQuestion,
-    resetQuiz,
-  };
-
-  return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;
+    return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;
 };
 
+// useQuiz hook sin cambios
 export const useQuiz = () => {
-  const context = useContext(QuizContext);
-  if (!context) {
-    throw new Error('useQuiz must be used within a QuizProvider');
-  }
-  return context;
+    // ... (código existente de useQuiz) ...
+     const context = useContext(QuizContext);
+     if (!context) {
+       throw new Error('useQuiz must be used within a QuizProvider');
+     }
+     return context;
 };

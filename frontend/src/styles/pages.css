@@ -49,3 +49,31 @@
       color: var(--primary-color);
       margin-bottom: var(--spacing-md);
   }
+
+  .failed-questions-section {
+    margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-lg);
+    border-top: 2px solid var(--primary-color);
+    width: 100%;
+    max-width: 700px; /* O el ancho que prefieras */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra las tarjetas de repaso */
+  }
+  
+  .failed-questions-section h2 {
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .no-failed-questions-section {
+      margin-top: var(--spacing-xl);
+      padding: var(--spacing-lg);
+      border-top: 2px solid var(--success-color);
+      text-align: center;
+      color: var(--success-color);
+  }
+  
+  .no-failed-questions-section h2 {
+      color: var(--success-color);
+  }

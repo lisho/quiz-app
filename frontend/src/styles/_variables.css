@@ -11,7 +11,8 @@
     --white-color: #ffffff;
     --gray-color: #6c757d;
     --border-color: #dee2e6;
-    --background-color: #f0f2f5; /* Light gray background */
+    --background-color: #bacbca; /* Light gray background */
+    --select-color-button: #3c8d96; /* Color for the select button */
   
     /* Typography */
     --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
